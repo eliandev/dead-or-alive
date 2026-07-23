@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Default Alive · ¿Tu vida financiera se sostiene?</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root{ --bg:#0a0d12; --panel:#10141c; --panel2:#151a24; --ink:#e8edf2; --mut:#7d8794;
+         --line:rgba(255,255,255,.09); --green:#22c55e; --amber:#f5a524; --red:#ef4444;
+         --disp:"Space Grotesk",sans-serif; --mono:"Space Mono",monospace; --body:"Inter",sans-serif; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.55}
+  .container{max-width:1000px;margin:0 auto;padding:0 22px}
+  .grid-bg{position:fixed;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:40px 40px;opacity:.35;z-index:0;pointer-events:none}
+  .z{position:relative;z-index:1}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+  .logo{display:flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:.5px}
+  .logo .h{color:var(--green);font-size:22px;animation:beat 1.1s infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}20%{transform:scale(1.25)}40%{transform:scale(1)}}
+  .tag-mono{font-family:var(--mono);font-size:11px;color:var(--mut);letter-spacing:1px}
+  .hero{text-align:center;padding:40px 0 26px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:3px;color:var(--green);text-transform:uppercase}
+  h1{font-family:var(--disp);font-weight:700;font-size:clamp(30px,5.2vw,50px);line-height:1.06;margin:14px 0;letter-spacing:-.5px}
+  h1 .dead{color:var(--red)} h1 .alive{color:var(--green)}
+  .lead{color:var(--mut);font-size:17px;max-width:58ch;margin:0 auto}
+  .credit{font-family:var(--mono);font-size:12px;color:var(--mut);margin-top:12px}
+  .credit b{color:var(--ink)}
+  .ecg{width:100%;height:90px;margin:22px 0;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .ecg svg{height:90px;width:200%;animation:scroll 4s linear infinite}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .ecg path{fill:none;stroke:var(--green);stroke-width:2.5;filter:drop-shadow(0 0 6px currentColor)}
+  .porque{background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(34,197,94,.08));border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin:6px 0 26px}
+  .porque .pk{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:8px}
+  .porque p{font-size:15.5px;color:var(--ink);line-height:1.6;margin:0}
+  .tool{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:28px;margin:10px 0 40px}
+  .sec-t{font-family:var(--disp);font-size:18px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .sec-s{font-size:13px;color:var(--mut);margin-bottom:16px}
+  .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+  @media(max-width:620px){.fields{grid-template-columns:1fr}}
+  .field label{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--mut);text-transform:uppercase}
+  .field .in{display:flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin-top:5px}
+  .field .in span{color:var(--mut)} .field .in input{background:none;border:none;outline:none;color:var(--ink);font-family:var(--body);font-size:15px;width:100%}
+  .hint-i{font-size:11px;color:var(--mut);margin-top:4px}
+  .seg{display:flex;gap:8px;margin-top:5px}
+  .seg button{flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--mut);border-radius:10px;padding:10px;cursor:pointer;font-family:var(--body);font-size:13px}
+  .seg button.on{border-color:var(--green);color:var(--ink);background:rgba(34,197,94,.12)}
+  .diag{width:100%;border:none;background:var(--green);color:#04140a;font-family:var(--disp);font-weight:700;font-size:16px;padding:15px;border-radius:12px;cursor:pointer;margin-top:14px}
+  .diag:hover{filter:brightness(1.08)}
+  .disc{font-size:11px;color:var(--mut);text-align:center;margin-top:12px}
+  .result{display:none;margin-top:22px}
+  .result.show{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .monitor{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0c1017}
+  .m-top{padding:22px;text-align:center;border-bottom:1px solid var(--line)}
+  .m-verdict{font-family:var(--disp);font-weight:700;font-size:32px;letter-spacing:-.5px}
+  .m-sub{font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+  .m-ecg{height:70px;overflow:hidden;margin-top:14px}
+  .m-ecg svg{height:70px;width:200%;animation:scroll 4s linear infinite}
+  .vitals{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}
+  @media(max-width:620px){.vitals{grid-template-columns:1fr 1fr}}
+  .vital{background:#0c1017;padding:16px}
+  .vital .vl{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--mut);text-transform:uppercase}
+  .vital .vv{font-family:var(--disp);font-weight:700;font-size:22px;margin-top:4px}
+  .why{padding:20px 22px;border-top:1px solid var(--line)}
+  .why h4{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--mut);text-transform:uppercase;margin-bottom:10px}
+  .why p{font-size:15px;margin-bottom:10px}
+  .rec{background:var(--panel2);border-radius:12px;padding:14px 16px;font-size:14px}
+  .rec b{display:block;margin-bottom:4px}
+  .heart-msg{padding:18px 22px;border-top:1px solid var(--line);font-size:14.5px;font-style:italic;color:#c7d0da;background:rgba(255,90,122,.05)}
+  .explain{padding:44px 0}
+  .explain h2{font-family:var(--disp);font-size:26px;text-align:center;margin-bottom:8px}
+  .explain .sub{text-align:center;color:var(--mut);margin-bottom:26px;max-width:60ch;margin-left:auto;margin-right:auto}
+  .defs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:620px){.defs{grid-template-columns:1fr}}
+  .def{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .def b{font-family:var(--disp)} .def p{font-size:13.5px;color:var(--mut);margin-top:5px}
+  .quote{text-align:center;font-family:var(--disp);font-size:20px;color:var(--ink);max-width:60ch;margin:30px auto 0;line-height:1.4}
+  .quote span{color:var(--mut);font-size:13px;font-family:var(--mono);display:block;margin-top:10px}
+
+
+  /* amores */
+  .amor{display:grid;grid-template-columns:1.4fr 90px auto auto;gap:8px;align-items:center;margin-bottom:8px}
+  @media(max-width:620px){.amor{grid-template-columns:1fr 80px auto auto}}
+  .amor input{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--ink);font-family:var(--body);font-size:14px;outline:none;width:100%}
+  .amor input:focus{border-color:var(--red)}
+  .amor .freq{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .amor .freq button{background:var(--panel2);border:none;color:var(--mut);padding:10px 10px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+  .amor .freq button.on{background:rgba(239,68,68,.15);color:var(--ink)}
+  .amor .del{background:none;border:none;color:var(--mut);font-size:18px;cursor:pointer;padding:0 4px}
+  .amor .mo{font-family:var(--mono);font-size:12px;color:var(--red);white-space:nowrap;min-width:74px;text-align:right}
+  .add-amor{background:none;border:1px dashed var(--line);color:var(--mut);border-radius:10px;padding:11px;width:100%;cursor:pointer;font-family:var(--body);font-size:13px}
+  .amor-total{text-align:right;font-family:var(--mono);font-size:13px;color:var(--ink);margin-top:10px}
+  .amor-total b{color:var(--red)}
+  /* asesoria */
+  .advice{border-top:1px solid var(--line);padding:22px}
+  .advice .ah{font-family:var(--disp);font-size:19px;margin-bottom:4px}
+  .advice .as{font-size:14px;color:var(--mut);margin-bottom:16px}
+  .advice .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:620px){.advice .row{grid-template-columns:1fr}}
+  .advice input,.advice select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:12px 13px;color:var(--ink);font-family:var(--body);font-size:14px;outline:none;margin-top:10px}
+  .advice input:focus,.advice select:focus{border-color:var(--green)}
+  .advice .full{margin-top:10px}
+  .advice .send{width:100%;border:none;background:var(--green);color:#04140a;font-family:var(--disp);font-weight:700;font-size:15px;padding:14px;border-radius:12px;cursor:pointer;margin-top:14px}
+  .advice .send:hover{filter:brightness(1.08)}
+  .advice .priv{font-size:11px;color:var(--mut);text-align:center;margin-top:10px}
+  .advice.dead{background:rgba(239,68,68,.06)}
+  .thanks{display:none;text-align:center;padding:30px 22px;border-top:1px solid var(--line)}
+  .thanks.show{display:block;animation:fade .4s ease}
+  .thanks .big{font-family:var(--disp);font-size:22px;color:var(--green);margin-bottom:6px}
+  footer{text-align:center;color:var(--mut);font-size:12px;padding:30px 0}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="container z">
+  <nav><div class="logo"><span class="h">♥</span> DEFAULT ALIVE</div><div class="tag-mono">el test de supervivencia de tu economía</div></nav>
+
+  <header class="hero">
+    <div class="eyebrow">Amor propio × Finanzas</div>
+    <h1>Gastás en lo que <span class="dead">amás</span>…<br/>¿pero tu vida se <span class="alive">sostiene</span>?</h1>
+    <p class="lead">Le das a los tuyos, te das tus gustos, construís la vida que soñás. Pero casi nadie se anima a ver el número clave: si seguís así, ¿tus ingresos te alcanzan… o te estás comiendo tus ahorros sin darte cuenta?</p>
+    <div class="credit">Marco <b>Default Alive</b> de Paul Graham (Y Combinator) — llevado a tu vida</div>
+    <div class="ecg"><svg viewBox="0 0 1200 90" id="heroEcg"></svg></div>
+  </header>
+
+  <div class="porque">
+    <div class="pk">¿Por qué amor y finanzas?</div>
+    <p>Gastamos en lo que <b>amamos</b>: los nuestros, los gustos, la vida que queremos. Y por eso mismo <b>evitamos mirar si eso se sostiene</b> — porque el número podría pedirnos frenar algo que amamos. <b style="color:var(--green)">El amor te ciega; los números te cuidan.</b> Quererte bien —y cuidar a tu yo del futuro— también es animarte a ver esto.</p>
+  </div>
+
+  <div class="tool">
+    <div class="sec-t">📊 Tu mes, en números</div>
+    <div class="sec-s">Un mes típico tuyo. Con esto vemos si tu vida financiera está viva… o en cuenta regresiva.</div>
+    <div class="fields">
+      <div class="field"><label>Ingresos / mes</label><div class="in"><span>$</span><input id="ing" type="number" value="1000"/></div></div>
+      <div class="field"><label>Gastos / mes</label><div class="in"><span>$</span><input id="cost" type="number" value="1200"/></div></div>
+      <div class="field"><label>Ahorros / colchón hoy</label><div class="in"><span>$</span><input id="caja" type="number" value="2500"/></div></div>
+      <div class="field"><label>Tus gastos, últimamente…</label>
+        <div class="seg" id="tend">
+          <button data-t="1" onclick="setT(this,1)">Suben</button>
+          <button data-t="0" class="on" onclick="setT(this,0)">Estables</button>
+          <button data-t="-1" onclick="setT(this,-1)">Bajan</button>
+        </div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="sec-t">❤️ Tus amores (lo que amás y te cuesta)</div>
+    <div class="sec-s">Eso que hacés porque te hace feliz. Poné cuánto te cuesta — por día o por mes. Sumamos tus amores a tus gastos.</div>
+    <div id="amores"></div>
+    <button type="button" class="add-amor" onclick="addAmor()">+ Agregar un amor</button>
+    <div class="amor-total" id="amorTotal"></div>
+
+    <div style="margin-top:14px">
+      <button type="button" id="advBtn" onclick="toggleAdv()" style="background:none;border:1px dashed var(--line);color:var(--mut);border-radius:10px;padding:12px;width:100%;cursor:pointer;font-family:var(--body);font-size:13px">⚙️ Ajustes avanzados (opcional) ▾</button>
+      <div id="adv" style="display:none;margin-top:12px">
+        <div class="fields">
+          <div class="field"><label>Ingresos extra / variables</label><div class="in"><span>$</span><input id="extra" type="number" value="0"/></div><div class="hint-i">Freelance, comisiones, changas — promedio por mes.</div></div>
+          <div class="field"><label>Cuotas de deuda / mes</label><div class="in"><span>$</span><input id="deuda" type="number" value="0"/></div><div class="hint-i">Préstamos, tarjeta, financiamientos.</div></div>
+          <div class="field"><label>Saldo total de deudas (opcional)</label><div class="in"><span>$</span><input id="deudaTotal" type="number" value="0"/></div><div class="hint-i">Para estimar en cuánto la terminás de pagar.</div></div>
+        </div>
+      </div>
+    </div>
+    <button class="diag" onclick="diagnosticar()">Ver si estoy vivo ♥</button>
+    <div class="disc">Inspirado en el marco Default Alive/Dead de Paul Graham · herramienta de reflexión, no asesoría financiera profesional.</div>
+
+    <div class="result" id="result">
+      <div class="monitor">
+        <div class="m-top">
+          <div class="m-verdict" id="verdict">—</div>
+          <div class="m-sub" id="vsub"></div>
+          <div class="m-ecg"><svg viewBox="0 0 1200 70" id="resEcg"></svg></div>
+        </div>
+        <div class="vitals">
+          <div class="vital"><div class="vl">Balance / mes</div><div class="vv" id="vRes">—</div></div>
+          <div class="vital"><div class="vl">Meses de colchón</div><div class="vv" id="vRun">—</div></div>
+          <div class="vital"><div class="vl">Tasa de ahorro</div><div class="vv" id="vSav">—</div></div>
+          <div class="vital"><div class="vl" id="vTenL">Tus gastos</div><div class="vv" id="vTen">—</div></div>
+        </div>
+        <div class="why">
+          <h4>Por qué este veredicto</h4>
+          <p id="whyTxt"></p>
+          <div class="rec" id="recBox"></div>
+        </div>
+        <div class="heart-msg" id="heartMsg"></div>
+
+        <div class="advice" id="advice" style="display:none">
+          <div class="ah" id="adviceH">¿Querés que te acompañen con esto?</div>
+          <div class="as" id="adviceS">Dejá tus datos y un asesor te orienta, sin costo.</div>
+          <div class="row">
+            <input id="fNombre" placeholder="Tu nombre"/>
+            <input id="fContacto" placeholder="Email o celular"/>
+          </div>
+          <button type="button" class="send" onclick="enviarAsesoria()">Quiero orientación gratis →</button>
+          <div class="priv">Tus datos son privados. Solo los usamos para contactarte sobre esto.</div>
+        </div>
+        <div class="thanks" id="thanks">
+          <div class="big">¡Gracias! ♥</div>
+          <p>Recibimos tus datos. Un asesor se pondrá en contacto con vos pronto.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="explain z">
+  <div class="container">
+    <h2>El marco, sin humo</h2>
+    <p class="sub">Paul Graham (Y Combinator) lo creó para startups, pero la pregunta es la misma para tu vida: ¿lo que entra sostiene lo que vivís, antes de que se acabe el colchón?</p>
+    <div class="defs">
+      <div class="def"><b style="color:var(--green)">Default Alive 🟢</b><p>Tus ingresos cubren tu vida sin comerte los ahorros. Tu colchón no baja: crece. Sos dueño de tu tiempo y tus decisiones.</p></div>
+      <div class="def"><b style="color:var(--red)">Default Dead 🔴</b><p>Gastás más de lo que ganás: cada mes tu colchón baja. A este ritmo, hay una fecha en la que llega a cero. El reloj corre.</p></div>
+      <div class="def"><b>Meses de colchón (runway)</b><p>Tus ahorros ÷ lo que te falta cada mes. Cuánto tiempo aguantás al ritmo actual.</p></div>
+      <div class="def"><b>Tasa de ahorro</b><p>El % de tus ingresos que te queda cada mes. Positiva = te cuidás; negativa = te drenás.</p></div>
+    </div>
+    <div class="quote">“Amar tu vida es también cuidar que puedas seguir viviéndola. Mirar los números no mata el sueño: lo hace sostenible.”<span>— la idea detrás de Default Alive</span></div>
+  </div>
+</section>
+
+<footer class="z">Hecho para quererte bien, con los números de tu lado · Default Alive 💚</footer>
+
+<script>
+  function ecgPath(amp){
+    var d='M0,35 ', x=0, base=35, step=150;
+    while(x<1200){
+      d+='L'+(x+40)+','+base+' L'+(x+55)+','+(base-6*amp/10)+' L'+(x+65)+','+(base+40*amp/10)+' L'+(x+75)+','+(base-55*amp/10)+' L'+(x+85)+','+(base+12*amp/10)+' L'+(x+100)+','+base+' ';
+      x+=step;
+    }
+    return d;
+  }
+  function paintEcg(id,amp,color){ var s=document.getElementById(id); s.innerHTML='<path d="'+ecgPath(amp)+'"/>'; s.querySelector('path').style.stroke=color; }
+  paintEcg('heroEcg',10,'var(--green)');
+
+  var amorSeed=[["☕ Café de la mañana",2,"dia"],["🧘 Yoga",40,"mes"]];
+  function amorMensual(row){ var m=+row.querySelector(".m").value||0; var f=row.getAttribute("data-freq"); return f==="dia"? m*30 : m; }
+  function renderAmorTotal(){
+    var t=0; document.querySelectorAll("#amores .amor").forEach(function(r){ t+=amorMensual(r); r.querySelector(".mo").textContent="≈ "+money(amorMensual(r))+"/mes"; });
+    document.getElementById("amorTotal").innerHTML = t>0 ? ("Tus amores suman <b>"+money(t)+"/mes</b> 💸") : "";
+    return t;
+  }
+  function amorRow(nombre,monto,freq){
+    var d=document.createElement("div"); d.className="amor"; d.setAttribute("data-freq",freq||"mes");
+    d.innerHTML='<input class="nm" placeholder="Ej: café, gym, Netflix…" value="'+(nombre||"")+'">'+
+      '<input class="m" type="number" placeholder="0" value="'+(monto||"")+'">'+
+      '<div class="freq"><button type="button" data-f="dia" onclick="setFreq(this)">/día</button><button type="button" data-f="mes" onclick="setFreq(this)">/mes</button></div>'+
+      '<span class="mo"></span><button type="button" class="del" onclick="this.parentNode.remove();renderAmorTotal()">×</button>';
+    document.getElementById("amores").appendChild(d);
+    d.querySelector('[data-f="'+(freq||"mes")+'"]').classList.add("on");
+    d.querySelectorAll(".m,.nm").forEach(function(i){ i.addEventListener("input",renderAmorTotal); });
+    renderAmorTotal();
+  }
+  function setFreq(btn){ var row=btn.closest(".amor"); row.setAttribute("data-freq",btn.getAttribute("data-f")); row.querySelectorAll(".freq button").forEach(function(b){b.classList.remove("on")}); btn.classList.add("on"); renderAmorTotal(); }
+  function addAmor(){ amorRow("",""," mes"); }
+  function totalAmores(){ var t=0; document.querySelectorAll("#amores .amor").forEach(function(r){ t+=amorMensual(r); }); return t; }
+  amorSeed.forEach(function(a){ amorRow(a[0],a[1],a[2]); });
+
+
+  var T=0;
+  function toggleAdv(){ var a=document.getElementById('adv'), b=document.getElementById('advBtn'); var open=a.style.display==='none'; a.style.display=open?'block':'none'; b.innerHTML='⚙️ Ajustes avanzados (opcional) '+(open?'▴':'▾'); }
+  function setT(btn,v){ T=v; document.querySelectorAll('#tend button').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); }
+  function money(n){ var s=n<0?'-':''; return s+'$'+Math.abs(Math.round(n)).toLocaleString('es-SV'); }
+
+  function enviarAsesoria(){
+    var n=document.getElementById('fNombre').value.trim();
+    var e=document.getElementById('fEmail').value.trim();
+    var ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+    if(!n){ alert('Escribí tu nombre.'); return; }
+    if(!ok){ alert('Escribí un correo válido.'); return; }
+    var lead={ nombre:n, email:e, whatsapp:document.getElementById('fTel').value.trim(),
+      momento:document.getElementById('fMomento').value, meta:document.getElementById('fMeta').value.trim(),
+      diagnostico: window._diag || {} };
+    // Para producción: enviá 'lead' a tu webhook (n8n/Firebase). Ej:
+    // fetch('TU_WEBHOOK_URL',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lead)});
+    console.log('LEAD capturado →', lead);
+    document.getElementById('advice').style.display='none';
+    document.getElementById('thanks').classList.add('show');
+    document.getElementById('thanks').scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  function enviarAsesoria(){
+    var n=document.getElementById('fNombre').value.trim();
+    var c=document.getElementById('fContacto').value.trim();
+    if(!n){ alert('Escribí tu nombre.'); return; }
+    if(c.length<6){ alert('Dejá un email o celular válido.'); return; }
+    var lead={ nombre:n, contacto:c, diagnostico: window._diag||{} };
+    // Producción: fetch('TU_WEBHOOK_N8N',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lead)});
+    console.log('LEAD →', lead);
+    document.getElementById('advice').style.display='none';
+    document.getElementById('thanks').classList.add('show');
+    document.getElementById('thanks').scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  function diagnosticar(){
+    var ing=+document.getElementById('ing').value||0;
+    var cost=+document.getElementById('cost').value||0;
+    var caja=+document.getElementById('caja').value||0;
+    var extra=+document.getElementById('extra').value||0;
+    var deuda=+document.getElementById('deuda').value||0;
+    var deudaTotal=+document.getElementById('deudaTotal').value||0;
+    var amores=totalAmores();
+    var ingT=ing+extra, egr=cost+deuda+amores;
+    var res=ingT-egr;
+    var runway = res<0 ? caja/(-res) : Infinity;
+    var sav = ingT>0 ? res/ingT : 0;
+    var dti = ingT>0 ? deuda/ingT : 0;
+    var mesesSaldar = (deudaTotal>0 && deuda>0) ? Math.ceil(deudaTotal/deuda) : null;
+    var tendTxt = T>0?'Suben ▲':(T<0?'Bajan ▼':'Estables ▬');
+
+    var verdict,sub,color,amp,why,rec,state;
+    if(res>=0 && T<=0){
+      state='alive'; color='var(--green)'; amp=10; verdict='DEFAULT ALIVE'; sub='Vivo por defecto';
+      why='Te sobran '+money(res)+' cada mes ('+Math.round(sav*100)+'% de tus ingresos) y tus gastos no se disparan. Tu colchón no baja: crece. Tu vida financiera se sostiene sola.';
+      rec='<b>Estás en posición de fuerza.</b> Ese margen es tu libertad: armá un fondo de emergencia (3–6 meses), automatizá el ahorro y recién ahí date más gustos o invertí. No necesitás sobrevivir — podés elegir.';
+    } else if(res>=0 && T>0){
+      state='warn'; color='var(--amber)'; amp=6; verdict='ALIVE, EN LA CUERDA FLOJA'; sub='Vivo, pero con fuga';
+      why='Hoy te sobran '+money(res)+' al mes, pero tus gastos vienen subiendo. Seguís vivo… por ahora. Si la subida continúa, en poco tiempo empezás a comerte el colchón.';
+      rec='<b>Actuá mientras tenés margen.</b> Identificá qué gasto está creciendo (suscripciones, delivery, “gustitos”) y ponele un techo. Es mucho más fácil frenar ahora que rescatarte después.';
+    } else {
+      state='dead'; color='var(--red)'; amp=0; verdict='DEFAULT DEAD'; sub='Muerto por defecto';
+      why='Gastás '+money(-res)+' más de lo que ganás cada mes. A este ritmo, tu colchón de '+money(caja)+' se agota en ~'+Math.max(1,Math.round(runway))+' mes(es)'+(T>0?' (y tus gastos aún suben)':'')+'. No es un mal mes: es una trayectoria.';
+      rec='<b>Modo cuidado, ahora.</b> Cambiá la trayectoria YA: recortá lo que no te suma, renegociá lo fijo o sumá ingresos. La meta inmediata es simple — que lo que entra vuelva a cubrir tu vida. Volvé a Default Alive por tus propios medios.';
+    }
+
+    if(amores>0){ why += ' Incluí lo que amás: '+money(amores)+'/mes en las cosas que te hacen feliz.'; }
+    if(extra>0){ why += ' (Sumé tus ingresos extra de '+money(extra)+'.)'; }
+    if(deuda>0){
+      why += ' De tus egresos, '+money(deuda)+' son cuotas de deuda — el '+Math.round(dti*100)+'% de tu ingreso'+(mesesSaldar?(', que a este ritmo terminás de pagar en ~'+mesesSaldar+' meses.'):'.');
+      if(dti>0.35){ rec += '<br/><br/><b>Ojo con la deuda:</b> más de un tercio de tu ingreso se va en cuotas. Atacá primero la más cara (tarjeta): te está robando el oxígeno.'; }
+    }
+    document.getElementById('vRes').textContent=money(res);
+    document.getElementById('vRes').style.color = res>=0?'var(--green)':'var(--red)';
+    document.getElementById('vRun').textContent = isFinite(runway)?(Math.round(runway)+' m'):'∞';
+    document.getElementById('vRun').style.color = (!isFinite(runway))?'var(--green)':(runway<4?'var(--red)':'var(--amber)');
+    document.getElementById('vSav').textContent = Math.round(sav*100)+'%';
+    document.getElementById('vSav').style.color = sav>=0?'var(--green)':'var(--red)';
+    if(deuda>0){
+      document.getElementById('vTenL').textContent='Carga de deuda';
+      document.getElementById('vTen').textContent=Math.round(dti*100)+'%';
+      document.getElementById('vTen').style.color = dti>0.35?'var(--red)':(dti>0.2?'var(--amber)':'var(--ink)');
+    } else {
+      document.getElementById('vTenL').textContent='Tus gastos';
+      document.getElementById('vTen').textContent=tendTxt;
+      document.getElementById('vTen').style.color='var(--ink)';
+    }
+
+    document.getElementById('verdict').textContent=verdict;
+    document.getElementById('verdict').style.color=color;
+    document.getElementById('vsub').textContent=sub;
+    document.getElementById('vsub').style.color=color;
+    document.getElementById('whyTxt').textContent=why;
+    document.getElementById('recBox').innerHTML=rec;
+    paintEcg('resEcg',amp,color);
+
+    var hm;
+    if(state==='alive') hm='Amás tu vida y además la sostenés. Ese equilibrio es amor propio en acción — le estás dando a tu yo del futuro un regalo enorme: opciones.';
+    else if(state==='warn') hm='Darte gustos está bien; te lo merecés. Pero quererte de verdad es también poner un límite antes de que el gusto se vuelva deuda. Tu yo del futuro te lo va a agradecer.';
+    else hm='Acá está la trampa del amor: gastamos de más en lo que amamos —los nuestros, la vida que queremos— y evitamos el número por miedo. Pero mirarlo hoy no es dejar de amar tu vida: es cuidarte para poder seguir viviéndola.';
+    document.getElementById('heartMsg').textContent='❤️ '+hm;
+
+    // CTA de asesoría contextual
+    window._diag = { verdict:verdict, res:res, runway:isFinite(runway)?Math.round(runway):null, sav:Math.round(sav*100) };
+    var adv=document.getElementById('advice');
+    if(state==='dead'){
+      adv.classList.add('dead');
+      document.getElementById('adviceH').textContent='No estás solo en esto. Un asesor puede ayudarte a darle vuelta.';
+      document.getElementById('adviceS').textContent='Tu resultado dice Default Dead — el mejor momento para actuar es hoy. Dejá tus datos y te orientamos, sin costo.';
+    } else if(state==='warn'){
+      adv.classList.remove('dead');
+      document.getElementById('adviceH').textContent='Estás a tiempo. Un asesor te ayuda a cerrar la fuga.';
+      document.getElementById('adviceS').textContent='Aprovechá el margen que tenés. Dejá tus datos para una orientación personalizada, gratis.';
+    } else {
+      adv.classList.remove('dead');
+      document.getElementById('adviceH').textContent='Vas bien. ¿Querés llevarlo al siguiente nivel?';
+      document.getElementById('adviceS').textContent='Un asesor puede ayudarte a hacer crecer ese margen: fondo de emergencia, inversión, metas. Gratis.';
+    }
+    document.getElementById('advice').style.display='block';
+    document.getElementById('thanks').classList.remove('show');
+
+    document.getElementById('result').classList.add('show');
+    document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+</script>
+</body>
+</html>
