@@ -4,6 +4,11 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Default Alive · ¿Tu vida financiera se sostiene?</title>
+<meta name="description" content="Descubrí en segundos si tu vida financiera está viva o en cuenta regresiva. Ponéle número a lo que amás y mirá si tus ingresos sostienen tu vida. Basado en el marco Default Alive de Paul Graham."/>
+<meta property="og:title" content="Default Alive · ¿Tu vida financiera se sostiene?"/>
+<meta property="og:description" content="El amor te ciega; los números te cuidan. Descubrí en segundos si tu vida se sostiene o si te estás comiendo tus ahorros."/>
+<meta property="og:type" content="website"/>
+<meta name="theme-color" content="#0a0d12"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
   :root{ --bg:#0a0d12; --panel:#10141c; --panel2:#151a24; --ink:#e8edf2; --mut:#7d8794;
@@ -49,6 +54,7 @@
   .diag{width:100%;border:none;background:var(--green);color:#04140a;font-family:var(--disp);font-weight:700;font-size:16px;padding:15px;border-radius:12px;cursor:pointer;margin-top:14px}
   .diag:hover{filter:brightness(1.08)}
   .disc{font-size:11px;color:var(--mut);text-align:center;margin-top:12px}
+  .hr{border-top:1px solid var(--line);margin:20px 0 18px}
   .result{display:none;margin-top:22px}
   .result.show{display:block;animation:fade .4s ease}
   @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -134,9 +140,9 @@
     <div class="sec-t">📊 Tu mes, en números</div>
     <div class="sec-s">Un mes típico tuyo. Con esto vemos si tu vida financiera está viva… o en cuenta regresiva.</div>
     <div class="fields">
-      <div class="field"><label>Ingresos / mes</label><div class="in"><span>$</span><input id="ing" type="number" value="1000"/></div></div>
-      <div class="field"><label>Gastos / mes</label><div class="in"><span>$</span><input id="cost" type="number" value="1200"/></div></div>
-      <div class="field"><label>Ahorros / colchón hoy</label><div class="in"><span>$</span><input id="caja" type="number" value="2500"/></div></div>
+      <div class="field"><label for="ing">Ingresos / mes</label><div class="in"><span>$</span><input id="ing" type="number" min="0" inputmode="decimal" value="1000"/></div></div>
+      <div class="field"><label for="cost">Gastos / mes</label><div class="in"><span>$</span><input id="cost" type="number" min="0" inputmode="decimal" value="1200"/></div></div>
+      <div class="field"><label for="caja">Ahorros / colchón hoy</label><div class="in"><span>$</span><input id="caja" type="number" min="0" inputmode="decimal" value="2500"/></div></div>
       <div class="field"><label>Tus gastos, últimamente…</label>
         <div class="seg" id="tend">
           <button data-t="1" onclick="setT(this,1)">Suben</button>
@@ -156,9 +162,9 @@
       <button type="button" id="advBtn" onclick="toggleAdv()" style="background:none;border:1px dashed var(--line);color:var(--mut);border-radius:10px;padding:12px;width:100%;cursor:pointer;font-family:var(--body);font-size:13px">⚙️ Ajustes avanzados (opcional) ▾</button>
       <div id="adv" style="display:none;margin-top:12px">
         <div class="fields">
-          <div class="field"><label>Ingresos extra / variables</label><div class="in"><span>$</span><input id="extra" type="number" value="0"/></div><div class="hint-i">Freelance, comisiones, changas — promedio por mes.</div></div>
-          <div class="field"><label>Cuotas de deuda / mes</label><div class="in"><span>$</span><input id="deuda" type="number" value="0"/></div><div class="hint-i">Préstamos, tarjeta, financiamientos.</div></div>
-          <div class="field"><label>Saldo total de deudas (opcional)</label><div class="in"><span>$</span><input id="deudaTotal" type="number" value="0"/></div><div class="hint-i">Para estimar en cuánto la terminás de pagar.</div></div>
+          <div class="field"><label for="extra">Ingresos extra / variables</label><div class="in"><span>$</span><input id="extra" type="number" min="0" inputmode="decimal" value="0"/></div><div class="hint-i">Freelance, comisiones, changas — promedio por mes.</div></div>
+          <div class="field"><label for="deuda">Cuotas de deuda / mes</label><div class="in"><span>$</span><input id="deuda" type="number" min="0" inputmode="decimal" value="0"/></div><div class="hint-i">Préstamos, tarjeta, financiamientos.</div></div>
+          <div class="field"><label for="deudaTotal">Saldo total de deudas (opcional)</label><div class="in"><span>$</span><input id="deudaTotal" type="number" min="0" inputmode="decimal" value="0"/></div><div class="hint-i">Para estimar en cuánto la terminás de pagar.</div></div>
         </div>
       </div>
     </div>
@@ -252,7 +258,7 @@
     renderAmorTotal();
   }
   function setFreq(btn){ var row=btn.closest(".amor"); row.setAttribute("data-freq",btn.getAttribute("data-f")); row.querySelectorAll(".freq button").forEach(function(b){b.classList.remove("on")}); btn.classList.add("on"); renderAmorTotal(); }
-  function addAmor(){ amorRow("",""," mes"); }
+  function addAmor(){ amorRow("","","mes"); }
   function totalAmores(){ var t=0; document.querySelectorAll("#amores .amor").forEach(function(r){ t+=amorMensual(r); }); return t; }
   amorSeed.forEach(function(a){ amorRow(a[0],a[1],a[2]); });
 
@@ -262,22 +268,9 @@
   function setT(btn,v){ T=v; document.querySelectorAll('#tend button').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); }
   function money(n){ var s=n<0?'-':''; return s+'$'+Math.abs(Math.round(n)).toLocaleString('es-SV'); }
 
-  function enviarAsesoria(){
-    var n=document.getElementById('fNombre').value.trim();
-    var e=document.getElementById('fEmail').value.trim();
-    var ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-    if(!n){ alert('Escribí tu nombre.'); return; }
-    if(!ok){ alert('Escribí un correo válido.'); return; }
-    var lead={ nombre:n, email:e, whatsapp:document.getElementById('fTel').value.trim(),
-      momento:document.getElementById('fMomento').value, meta:document.getElementById('fMeta').value.trim(),
-      diagnostico: window._diag || {} };
-    // Para producción: enviá 'lead' a tu webhook (n8n/Firebase). Ej:
-    // fetch('TU_WEBHOOK_URL',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lead)});
-    console.log('LEAD capturado →', lead);
-    document.getElementById('advice').style.display='none';
-    document.getElementById('thanks').classList.add('show');
-    document.getElementById('thanks').scrollIntoView({behavior:'smooth',block:'nearest'});
-  }
+  // Analytics: eventos GA4-ready vía dataLayer (si no hay GTM, no rompe nada)
+  window.dataLayer = window.dataLayer || [];
+  function track(evento, datos){ window.dataLayer.push(Object.assign({event:evento}, datos||{})); }
 
   function enviarAsesoria(){
     var n=document.getElementById('fNombre').value.trim();
@@ -287,6 +280,7 @@
     var lead={ nombre:n, contacto:c, diagnostico: window._diag||{} };
     // Producción: fetch('TU_WEBHOOK_N8N',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lead)});
     console.log('LEAD →', lead);
+    track('lead_asesoria', { verdict: (window._diag||{}).verdict||null });
     document.getElementById('advice').style.display='none';
     document.getElementById('thanks').classList.add('show');
     document.getElementById('thanks').scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -331,7 +325,7 @@
     }
     document.getElementById('vRes').textContent=money(res);
     document.getElementById('vRes').style.color = res>=0?'var(--green)':'var(--red)';
-    document.getElementById('vRun').textContent = isFinite(runway)?(Math.round(runway)+' m'):'∞';
+    document.getElementById('vRun').textContent = isFinite(runway)?(runway<1?'<1 m':Math.round(runway)+' m'):'∞';
     document.getElementById('vRun').style.color = (!isFinite(runway))?'var(--green)':(runway<4?'var(--red)':'var(--amber)');
     document.getElementById('vSav').textContent = Math.round(sav*100)+'%';
     document.getElementById('vSav').style.color = sav>=0?'var(--green)':'var(--red)';
@@ -378,9 +372,16 @@
     document.getElementById('advice').style.display='block';
     document.getElementById('thanks').classList.remove('show');
 
+    track('diagnostico', { verdict: verdict, runway_meses: isFinite(runway)?Math.round(runway):null, tasa_ahorro: Math.round(sav*100) });
+
     document.getElementById('result').classList.add('show');
     document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
   }
+
+  // Enter en cualquier campo numérico = diagnosticar
+  document.querySelectorAll('.tool input[type="number"]').forEach(function(i){
+    i.addEventListener('keydown', function(e){ if(e.key==='Enter'){ diagnosticar(); } });
+  });
 </script>
 </body>
 </html>
