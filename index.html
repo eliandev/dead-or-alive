@@ -99,6 +99,9 @@
   .add-amor{background:none;border:1px dashed var(--line);color:var(--mut);border-radius:10px;padding:11px;width:100%;cursor:pointer;font-family:var(--body);font-size:13px}
   .amor-total{text-align:right;font-family:var(--mono);font-size:13px;color:var(--ink);margin-top:10px}
   .amor-total b{color:var(--red)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 12px}
+  .chip{background:var(--panel2);border:1px solid var(--line);color:var(--mut);border-radius:999px;padding:7px 12px;font-size:12.5px;cursor:pointer;font-family:var(--body)}
+  .chip:hover{border-color:var(--red);color:var(--ink)}
   /* asesoria */
   .advice{border-top:1px solid var(--line);padding:22px}
   .advice .ah{font-family:var(--disp);font-size:19px;margin-bottom:4px}
@@ -111,6 +114,10 @@
   .advice .send{width:100%;border:none;background:var(--green);color:#04140a;font-family:var(--disp);font-weight:700;font-size:15px;padding:14px;border-radius:12px;cursor:pointer;margin-top:14px}
   .advice .send:hover{filter:brightness(1.08)}
   .advice .priv{font-size:11px;color:var(--mut);text-align:center;margin-top:10px}
+  .advice .fe{display:none;font-size:12.5px;color:var(--red);margin-top:8px}
+  .advice .fe.show{display:block}
+  .advice input.bad,.advice select.bad{border-color:var(--red)}
+  .advice .send:disabled{opacity:.6;cursor:default}
   .advice.dead{background:rgba(239,68,68,.06)}
   .thanks{display:none;text-align:center;padding:30px 22px;border-top:1px solid var(--line)}
   .thanks.show{display:block;animation:fade .4s ease}
@@ -154,6 +161,7 @@
     <div class="hr"></div>
     <div class="sec-t">❤️ Tus amores (lo que amás y te cuesta)</div>
     <div class="sec-s">Eso que hacés porque te hace feliz. Poné cuánto te cuesta — por día o por mes. Sumamos tus amores a tus gastos.</div>
+    <div class="chips" id="chips"></div>
     <div id="amores"></div>
     <button type="button" class="add-amor" onclick="addAmor()">+ Agregar un amor</button>
     <div class="amor-total" id="amorTotal"></div>
@@ -180,7 +188,7 @@
         </div>
         <div class="vitals">
           <div class="vital"><div class="vl">Balance / mes</div><div class="vv" id="vRes">—</div></div>
-          <div class="vital"><div class="vl">Meses de colchón</div><div class="vv" id="vRun">—</div></div>
+          <div class="vital"><div class="vl" id="vRunL">Meses de colchón</div><div class="vv" id="vRun">—</div></div>
           <div class="vital"><div class="vl">Tasa de ahorro</div><div class="vv" id="vSav">—</div></div>
           <div class="vital"><div class="vl" id="vTenL">Tus gastos</div><div class="vv" id="vTen">—</div></div>
         </div>
@@ -195,15 +203,23 @@
           <div class="ah" id="adviceH">¿Querés que te acompañen con esto?</div>
           <div class="as" id="adviceS">Dejá tus datos y un asesor te orienta, sin costo.</div>
           <div class="row">
-            <input id="fNombre" placeholder="Tu nombre"/>
-            <input id="fContacto" placeholder="Email o celular"/>
+            <input id="fNombre" placeholder="Tu nombre" autocomplete="name"/>
+            <input id="fContacto" placeholder="Email o WhatsApp" autocomplete="email"/>
           </div>
+          <select id="fMeta" class="full">
+            <option value="">¿Qué te gustaría lograr? (opcional)</option>
+            <option>Salir del rojo y ordenarme</option>
+            <option>Armar mi fondo de emergencia</option>
+            <option>Pagar mis deudas más rápido</option>
+            <option>Empezar a invertir</option>
+          </select>
+          <div class="fe" id="formErr"></div>
           <button type="button" class="send" onclick="enviarAsesoria()">Quiero orientación gratis →</button>
           <div class="priv">Tus datos son privados. Solo los usamos para contactarte sobre esto.</div>
         </div>
         <div class="thanks" id="thanks">
           <div class="big">¡Gracias! ♥</div>
-          <p>Recibimos tus datos. Un asesor se pondrá en contacto con vos pronto.</p>
+          <p id="thanksTxt">Recibimos tus datos. Un asesor se pondrá en contacto con vos pronto.</p>
         </div>
 
       </div>
@@ -262,6 +278,24 @@
   function totalAmores(){ var t=0; document.querySelectorAll("#amores .amor").forEach(function(r){ t+=amorMensual(r); }); return t; }
   amorSeed.forEach(function(a){ amorRow(a[0],a[1],a[2]); });
 
+  // Chips: amores comunes de un toque
+  var chipDefs=[["🛵 Delivery",60,"mes"],["📺 Streaming",15,"mes"],["🏋️ Gym",35,"mes"],["🍻 Salidas",80,"mes"],["🎮 Gaming",25,"mes"],["💅 Cuidado personal",30,"mes"],["🐶 Mascota",40,"mes"],["🎁 Regalos",25,"mes"]];
+  chipDefs.forEach(function(c){
+    var b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent='+ '+c[0];
+    b.onclick=function(){ amorRow(c[0],c[1],c[2]); };
+    document.getElementById('chips').appendChild(b);
+  });
+
+  // El amor que más pesa en el mes
+  function amorMayor(){
+    var best=null,bv=0;
+    document.querySelectorAll('#amores .amor').forEach(function(r){
+      var v=amorMensual(r);
+      if(v>bv){ bv=v; best=(r.querySelector('.nm').value||'ese gusto'); }
+    });
+    return best?{nombre:best,monto:bv}:null;
+  }
+
 
   var T=0;
   function toggleAdv(){ var a=document.getElementById('adv'), b=document.getElementById('advBtn'); var open=a.style.display==='none'; a.style.display=open?'block':'none'; b.innerHTML='⚙️ Ajustes avanzados (opcional) '+(open?'▴':'▾'); }
@@ -272,19 +306,45 @@
   window.dataLayer = window.dataLayer || [];
   function track(evento, datos){ window.dataLayer.push(Object.assign({event:evento}, datos||{})); }
 
+  function limpiarErr(){
+    document.querySelectorAll('#advice .bad').forEach(function(el){ el.classList.remove('bad'); });
+    var fe=document.getElementById('formErr'); fe.textContent=''; fe.classList.remove('show');
+  }
+  function marcarErr(el,msg){
+    el.classList.add('bad');
+    var fe=document.getElementById('formErr'); fe.textContent=msg; fe.classList.add('show');
+    el.focus();
+  }
   function enviarAsesoria(){
-    var n=document.getElementById('fNombre').value.trim();
-    var c=document.getElementById('fContacto').value.trim();
-    if(!n){ alert('Escribí tu nombre.'); return; }
-    if(c.length<6){ alert('Dejá un email o celular válido.'); return; }
-    var lead={ nombre:n, contacto:c, diagnostico: window._diag||{} };
+    limpiarErr();
+    var nEl=document.getElementById('fNombre'), cEl=document.getElementById('fContacto');
+    var n=nEl.value.trim(), c=cEl.value.trim();
+    var esEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c);
+    var esTel=/^[+()\d][\d\s()-]{6,}$/.test(c);
+    if(!n){ marcarErr(nEl,'Escribí tu nombre.'); return; }
+    if(!esEmail && !esTel){ marcarErr(cEl,'Dejá un email válido o un celular (mínimo 7 dígitos).'); return; }
+    var lead={ nombre:n, contacto:c, tipo_contacto: esEmail?'email':'whatsapp',
+      objetivo: document.getElementById('fMeta').value||null,
+      diagnostico: window._diag||{}, fecha: new Date().toISOString() };
     // Producción: fetch('TU_WEBHOOK_N8N',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lead)});
     console.log('LEAD →', lead);
-    track('lead_asesoria', { verdict: (window._diag||{}).verdict||null });
-    document.getElementById('advice').style.display='none';
-    document.getElementById('thanks').classList.add('show');
-    document.getElementById('thanks').scrollIntoView({behavior:'smooth',block:'nearest'});
+    track('lead_asesoria', { verdict: lead.diagnostico.verdict||null, objetivo: lead.objetivo });
+    var btn=document.querySelector('#advice .send'); btn.disabled=true; btn.textContent='Enviando…';
+    setTimeout(function(){
+      var st=(window._diag||{}).state;
+      var tx= st==='dead' ? 'Diste el paso más difícil: mirar el número. Un asesor te contacta pronto para ayudarte a darle vuelta al rojo.'
+            : st==='warn' ? 'Un asesor te contacta pronto para ayudarte a cerrar la fuga mientras todavía tenés margen.'
+            : 'Un asesor te contacta pronto para ayudarte a hacer crecer ese margen: fondo de emergencia, metas, inversión.';
+      document.getElementById('thanksTxt').textContent=tx;
+      document.getElementById('advice').style.display='none';
+      document.getElementById('thanks').classList.add('show');
+      document.getElementById('thanks').scrollIntoView({behavior:'smooth',block:'nearest'});
+      btn.disabled=false; btn.textContent='Quiero orientación gratis →';
+    },400);
   }
+  ['fNombre','fContacto'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', limpiarErr);
+  });
 
   function diagnosticar(){
     var ing=+document.getElementById('ing').value||0;
@@ -302,22 +362,45 @@
     var mesesSaldar = (deudaTotal>0 && deuda>0) ? Math.ceil(deudaTotal/deuda) : null;
     var tendTxt = T>0?'Suben ▲':(T<0?'Bajan ▼':'Estables ▬');
 
+    var margen = ingT>0 ? res/ingT : 0;
     var verdict,sub,color,amp,why,rec,state;
-    if(res>=0 && T<=0){
+    if(res<0){
+      state='dead'; color='var(--red)'; amp=0; verdict='DEFAULT DEAD'; sub='Muerto por defecto';
+      why='Gastás '+money(-res)+' más de lo que ganás cada mes. A este ritmo, tu colchón de '+money(caja)+' se agota en ~'+(runway<1?'menos de 1 mes':Math.max(1,Math.round(runway))+' mes(es)')+(T>0?' — y tus gastos aún suben':'')+'. No es un mal mes: es una trayectoria.';
+      rec='<b>Modo cuidado, ahora.</b> Cambiá la trayectoria YA: recortá lo que no te suma, renegociá lo fijo o sumá ingresos. La meta inmediata es simple — que lo que entra vuelva a cubrir tu vida. Volvé a Default Alive por tus propios medios.';
+    } else if(T>0 || margen<0.05){
+      state='warn'; color='var(--amber)'; amp=6; verdict='ALIVE, EN LA CUERDA FLOJA'; sub='Vivo, pero frágil';
+      if(T>0){
+        // Proyección: si los gastos suben ~3%/mes, ¿en cuántos meses cruzás a rojo?
+        var nCruce = Math.max(1, Math.round(Math.log(ingT/Math.max(egr,1))/Math.log(1.03)));
+        why='Hoy te sobran '+money(res)+' al mes, pero tus gastos vienen subiendo. Si suben apenas un 3% mensual, en ~'+nCruce+' mes(es) cruzás a rojo y empezás a comerte el colchón. Seguís vivo… por ahora.';
+      } else {
+        why='Te sobran '+money(res)+' al mes — apenas el '+Math.round(margen*100)+'% de tu ingreso. Estás vivo, pero sin margen de error: un imprevisto (una emergencia, un mes flojo) te manda directo al rojo.';
+      }
+      rec='<b>Actuá mientras tenés margen.</b> Identificá qué gasto está creciendo o cuál podés bajar, y ponele un techo. Es mucho más fácil frenar ahora que rescatarte después.';
+    } else {
       state='alive'; color='var(--green)'; amp=10; verdict='DEFAULT ALIVE'; sub='Vivo por defecto';
       why='Te sobran '+money(res)+' cada mes ('+Math.round(sav*100)+'% de tus ingresos) y tus gastos no se disparan. Tu colchón no baja: crece. Tu vida financiera se sostiene sola.';
       rec='<b>Estás en posición de fuerza.</b> Ese margen es tu libertad: armá un fondo de emergencia (3–6 meses), automatizá el ahorro y recién ahí date más gustos o invertí. No necesitás sobrevivir — podés elegir.';
-    } else if(res>=0 && T>0){
-      state='warn'; color='var(--amber)'; amp=6; verdict='ALIVE, EN LA CUERDA FLOJA'; sub='Vivo, pero con fuga';
-      why='Hoy te sobran '+money(res)+' al mes, pero tus gastos vienen subiendo. Seguís vivo… por ahora. Si la subida continúa, en poco tiempo empezás a comerte el colchón.';
-      rec='<b>Actuá mientras tenés margen.</b> Identificá qué gasto está creciendo (suscripciones, delivery, “gustitos”) y ponele un techo. Es mucho más fácil frenar ahora que rescatarte después.';
-    } else {
-      state='dead'; color='var(--red)'; amp=0; verdict='DEFAULT DEAD'; sub='Muerto por defecto';
-      why='Gastás '+money(-res)+' más de lo que ganás cada mes. A este ritmo, tu colchón de '+money(caja)+' se agota en ~'+Math.max(1,Math.round(runway))+' mes(es)'+(T>0?' (y tus gastos aún suben)':'')+'. No es un mal mes: es una trayectoria.';
-      rec='<b>Modo cuidado, ahora.</b> Cambiá la trayectoria YA: recortá lo que no te suma, renegociá lo fijo o sumá ingresos. La meta inmediata es simple — que lo que entra vuelva a cubrir tu vida. Volvé a Default Alive por tus propios medios.';
     }
 
-    if(amores>0){ why += ' Incluí lo que amás: '+money(amores)+'/mes en las cosas que te hacen feliz.'; }
+    // ❤️ Amor × finanzas: ¿el problema son tus gustos… o es estructural?
+    var amorPct = (amores>0 && ingT>0) ? Math.round(amores/ingT*100) : 0;
+    if(amores>0){
+      why += ' Tus amores suman '+money(amores)+'/mes'+(amorPct?(' — el '+amorPct+'% de tu ingreso'):'')+'.';
+      if(state==='dead'){
+        var deficit=-res;
+        if(amores>=deficit){
+          rec += '<br/><br/><b>La buena noticia 💚:</b> no hace falta matar tus amores. Con recortarles '+money(deficit)+'/mes (de los '+money(amores)+' que hoy les ponés) volvés a Default Alive. Elegí qué gusto se queda y cuál espera — pero elegilo vos, antes de que lo elija el banco.';
+        } else {
+          rec += '<br/><br/><b>Dato clave:</b> aunque cortaras TODOS tus amores ('+money(amores)+'/mes), seguirías en rojo por '+money(deficit-amores)+'/mes. El problema no son tus gustos: es estructural. Atacá los gastos fijos o subí ingresos — y no te castigues por el café.';
+        }
+      } else if(state==='warn'){
+        rec += '<br/><br/><b>Sobre tus amores:</b> el '+amorPct+'% de tu ingreso va a tus gustos. No los cortes — poneles un techo mensual y disfrutalos sin culpa dentro de ese número.';
+      } else {
+        why += ' Y te los podés pagar: eso es disfrutar sin culpa.';
+      }
+    }
     if(extra>0){ why += ' (Sumé tus ingresos extra de '+money(extra)+'.)'; }
     if(deuda>0){
       why += ' De tus egresos, '+money(deuda)+' son cuotas de deuda — el '+Math.round(dti*100)+'% de tu ingreso'+(mesesSaldar?(', que a este ritmo terminás de pagar en ~'+mesesSaldar+' meses.'):'.');
@@ -325,14 +408,27 @@
     }
     document.getElementById('vRes').textContent=money(res);
     document.getElementById('vRes').style.color = res>=0?'var(--green)':'var(--red)';
-    document.getElementById('vRun').textContent = isFinite(runway)?(runway<1?'<1 m':Math.round(runway)+' m'):'∞';
-    document.getElementById('vRun').style.color = (!isFinite(runway))?'var(--green)':(runway<4?'var(--red)':'var(--amber)');
+    // En rojo: cuánto colchón te queda. En verde/ámbar: cuántos meses de vida cubre tu colchón si el ingreso parara.
+    var cobertura = egr>0 ? caja/egr : Infinity;
+    if(res<0){
+      document.getElementById('vRunL').textContent='Colchón restante';
+      document.getElementById('vRun').textContent = runway<1?'<1 m':Math.round(runway)+' m';
+      document.getElementById('vRun').style.color = runway<4?'var(--red)':'var(--amber)';
+    } else {
+      document.getElementById('vRunL').textContent='Fondo de emergencia';
+      document.getElementById('vRun').textContent = isFinite(cobertura)?(cobertura<1?'<1 m':Math.round(cobertura)+' m'):'∞';
+      document.getElementById('vRun').style.color = cobertura>=3?'var(--green)':'var(--amber)';
+    }
     document.getElementById('vSav').textContent = Math.round(sav*100)+'%';
     document.getElementById('vSav').style.color = sav>=0?'var(--green)':'var(--red)';
     if(deuda>0){
       document.getElementById('vTenL').textContent='Carga de deuda';
       document.getElementById('vTen').textContent=Math.round(dti*100)+'%';
       document.getElementById('vTen').style.color = dti>0.35?'var(--red)':(dti>0.2?'var(--amber)':'var(--ink)');
+    } else if(amores>0){
+      document.getElementById('vTenL').textContent='Tus amores';
+      document.getElementById('vTen').textContent=money(amores);
+      document.getElementById('vTen').style.color = amorPct>30?'var(--red)':(amorPct>15?'var(--amber)':'var(--ink)');
     } else {
       document.getElementById('vTenL').textContent='Tus gastos';
       document.getElementById('vTen').textContent=tendTxt;
@@ -351,10 +447,13 @@
     if(state==='alive') hm='Amás tu vida y además la sostenés. Ese equilibrio es amor propio en acción — le estás dando a tu yo del futuro un regalo enorme: opciones.';
     else if(state==='warn') hm='Darte gustos está bien; te lo merecés. Pero quererte de verdad es también poner un límite antes de que el gusto se vuelva deuda. Tu yo del futuro te lo va a agradecer.';
     else hm='Acá está la trampa del amor: gastamos de más en lo que amamos —los nuestros, la vida que queremos— y evitamos el número por miedo. Pero mirarlo hoy no es dejar de amar tu vida: es cuidarte para poder seguir viviéndola.';
+    var top=amorMayor();
+    if(state==='alive' && top) hm += ' Y seguí disfrutando de '+top.nombre.trim()+': te lo ganaste.';
+    if(state==='dead' && top && amores>=(-res)) hm += ' Empezá por mirar '+top.nombre.trim()+' ('+money(top.monto)+'/mes) — no para eliminarlo: para decidirlo.';
     document.getElementById('heartMsg').textContent='❤️ '+hm;
 
     // CTA de asesoría contextual
-    window._diag = { verdict:verdict, res:res, runway:isFinite(runway)?Math.round(runway):null, sav:Math.round(sav*100) };
+    window._diag = { verdict:verdict, state:state, res:res, runway:isFinite(runway)?Math.round(runway):null, sav:Math.round(sav*100), amores:amores, amor_pct:amorPct };
     var adv=document.getElementById('advice');
     if(state==='dead'){
       adv.classList.add('dead');
