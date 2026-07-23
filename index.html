@@ -32,6 +32,8 @@
   .lead{color:var(--mut);font-size:17px;max-width:58ch;margin:0 auto}
   .credit{font-family:var(--mono);font-size:12px;color:var(--mut);margin-top:12px}
   .credit b{color:var(--ink)}
+  .cta-hero{display:inline-block;background:var(--green);color:#04140a;font-family:var(--disp);font-weight:700;font-size:15px;padding:13px 28px;border-radius:12px;text-decoration:none;margin-top:20px}
+  .cta-hero:hover{filter:brightness(1.08)}
   .ecg{width:100%;height:90px;margin:22px 0;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
   .ecg svg{height:90px;width:200%;animation:scroll 4s linear infinite}
   @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -39,25 +41,75 @@
   .porque{background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(34,197,94,.08));border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin:6px 0 26px}
   .porque .pk{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:8px}
   .porque p{font-size:15.5px;color:var(--ink);line-height:1.6;margin:0}
-  .tool{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:28px;margin:10px 0 40px}
-  .sec-t{font-family:var(--disp);font-size:18px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-  .sec-s{font-size:13px;color:var(--mut);margin-bottom:16px}
+  .tool{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:28px;margin:10px 0 40px;min-height:380px}
+  @media(max-width:620px){.tool{padding:22px 18px}}
+
+  /* ===== wizard ===== */
+  .wiz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+  .wiz-dots{display:flex;gap:6px}
+  .wiz-dots span{width:28px;height:4px;border-radius:99px;background:var(--line);transition:.3s}
+  .wiz-dots span.on{background:var(--green)}
+  .wiz-back{background:none;border:none;color:var(--mut);font-family:var(--mono);font-size:12px;cursor:pointer;padding:4px}
+  .wiz-back:hover{color:var(--ink)}
+  .step[hidden]{display:none}
+  .step{animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .q-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:8px}
+  .q{font-family:var(--disp);font-size:clamp(21px,3.6vw,28px);margin-bottom:6px;letter-spacing:-.3px}
+  .q-sub{font-size:14px;color:var(--mut);margin-bottom:18px}
+  .next{width:100%;border:none;background:var(--green);color:#04140a;font-family:var(--disp);font-weight:700;font-size:16px;padding:15px;border-radius:12px;cursor:pointer;margin-top:16px}
+  .next:hover{filter:brightness(1.08)}
+  .next:disabled{opacity:.35;cursor:default;filter:none}
+  .next.red{background:var(--red);color:#fff}
+  .skip{display:block;margin:12px auto 0;background:none;border:none;color:var(--mut);font-size:13px;cursor:pointer;text-decoration:underline}
+  .skip:hover{color:var(--ink)}
+  .step-err{display:none;font-size:12.5px;color:var(--red);margin-top:10px;text-align:center}
+  .step-err.show{display:block}
+
+  /* paso 1: elegir amores */
+  .pick-grid{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px}
+  .pick{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:11px 17px;font-size:14.5px;cursor:pointer;font-family:var(--body);transition:.15s}
+  .pick:hover{border-color:var(--mut)}
+  .pick.on{border-color:var(--red);background:rgba(239,68,68,.13)}
+  .pick.on::after{content:" ♥";color:var(--red)}
+  .pick-free{display:flex;gap:8px}
+  .pick-free input{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:12px 14px;color:var(--ink);font-family:var(--body);font-size:14px;outline:none}
+  .pick-free input:focus{border-color:var(--red)}
+  .pick-free button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:11px;padding:0 18px;cursor:pointer;font-size:14px}
+
+  /* paso 2: costo por amor */
+  .cost-amor{font-family:var(--disp);font-weight:700;font-size:clamp(24px,4.5vw,34px);margin:4px 0 16px}
+  .cost-box{display:flex;gap:10px;align-items:stretch;margin-bottom:12px}
+  @media(max-width:480px){.cost-box{flex-direction:column}}
+  .cost-box .cin{flex:1;display:flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .cost-box .cin span{color:var(--mut);font-size:20px}
+  .cost-box .cin input{background:none;border:none;outline:none;color:var(--ink);font-size:24px;font-family:var(--disp);font-weight:700;width:100%}
+  .freq2{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .freq2 button{background:var(--panel2);border:none;color:var(--mut);padding:14px 18px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+  .freq2 button.on{background:rgba(239,68,68,.15);color:var(--ink)}
+  .cost-live{font-family:var(--mono);font-size:15px;color:var(--red);margin-bottom:4px;min-height:22px}
+  .ticker{font-family:var(--mono);font-size:12.5px;color:var(--mut);border-top:1px dashed var(--line);padding-top:12px;margin-top:14px;line-height:1.9}
+  .ticker b{color:var(--red)}
+
+  /* pasos 3-4: campos */
   .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
   @media(max-width:620px){.fields{grid-template-columns:1fr}}
   .field label{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--mut);text-transform:uppercase}
   .field .in{display:flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:11px 13px;margin-top:5px}
   .field .in span{color:var(--mut)} .field .in input{background:none;border:none;outline:none;color:var(--ink);font-family:var(--body);font-size:15px;width:100%}
+  .field .in.bad{border-color:var(--red)}
   .hint-i{font-size:11px;color:var(--mut);margin-top:4px}
   .seg{display:flex;gap:8px;margin-top:5px}
   .seg button{flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--mut);border-radius:10px;padding:10px;cursor:pointer;font-family:var(--body);font-size:13px}
   .seg button.on{border-color:var(--green);color:var(--ink);background:rgba(34,197,94,.12)}
-  .diag{width:100%;border:none;background:var(--green);color:#04140a;font-family:var(--disp);font-weight:700;font-size:16px;padding:15px;border-radius:12px;cursor:pointer;margin-top:14px}
-  .diag:hover{filter:brightness(1.08)}
   .disc{font-size:11px;color:var(--mut);text-align:center;margin-top:12px}
-  .hr{border-top:1px solid var(--line);margin:20px 0 18px}
-  .result{display:none;margin-top:22px}
+
+  /* suspenso + resultado */
+  .suspense{text-align:center;padding:26px 0 10px}
+  .suspense .s-t{font-family:var(--mono);font-size:13px;letter-spacing:2px;color:var(--mut);text-transform:uppercase;animation:blink 1s infinite;margin-top:10px}
+  @keyframes blink{50%{opacity:.35}}
+  .result{display:none}
   .result.show{display:block;animation:fade .4s ease}
-  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   .monitor{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0c1017}
   .m-top{padding:22px;text-align:center;border-bottom:1px solid var(--line)}
   .m-verdict{font-family:var(--disp);font-weight:700;font-size:32px;letter-spacing:-.5px}
@@ -75,33 +127,10 @@
   .rec{background:var(--panel2);border-radius:12px;padding:14px 16px;font-size:14px}
   .rec b{display:block;margin-bottom:4px}
   .heart-msg{padding:18px 22px;border-top:1px solid var(--line);font-size:14.5px;font-style:italic;color:#c7d0da;background:rgba(255,90,122,.05)}
-  .explain{padding:44px 0}
-  .explain h2{font-family:var(--disp);font-size:26px;text-align:center;margin-bottom:8px}
-  .explain .sub{text-align:center;color:var(--mut);margin-bottom:26px;max-width:60ch;margin-left:auto;margin-right:auto}
-  .defs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  @media(max-width:620px){.defs{grid-template-columns:1fr}}
-  .def{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
-  .def b{font-family:var(--disp)} .def p{font-size:13.5px;color:var(--mut);margin-top:5px}
-  .quote{text-align:center;font-family:var(--disp);font-size:20px;color:var(--ink);max-width:60ch;margin:30px auto 0;line-height:1.4}
-  .quote span{color:var(--mut);font-size:13px;font-family:var(--mono);display:block;margin-top:10px}
+  .redo{display:flex;gap:10px;justify-content:center;padding:16px 22px;border-top:1px solid var(--line)}
+  .redo button{background:none;border:1px solid var(--line);color:var(--mut);border-radius:10px;padding:9px 16px;cursor:pointer;font-size:13px;font-family:var(--body)}
+  .redo button:hover{color:var(--ink);border-color:var(--mut)}
 
-
-  /* amores */
-  .amor{display:grid;grid-template-columns:1.4fr 90px auto auto;gap:8px;align-items:center;margin-bottom:8px}
-  @media(max-width:620px){.amor{grid-template-columns:1fr 80px auto auto}}
-  .amor input{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--ink);font-family:var(--body);font-size:14px;outline:none;width:100%}
-  .amor input:focus{border-color:var(--red)}
-  .amor .freq{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-  .amor .freq button{background:var(--panel2);border:none;color:var(--mut);padding:10px 10px;font-size:12px;cursor:pointer;font-family:var(--mono)}
-  .amor .freq button.on{background:rgba(239,68,68,.15);color:var(--ink)}
-  .amor .del{background:none;border:none;color:var(--mut);font-size:18px;cursor:pointer;padding:0 4px}
-  .amor .mo{font-family:var(--mono);font-size:12px;color:var(--red);white-space:nowrap;min-width:74px;text-align:right}
-  .add-amor{background:none;border:1px dashed var(--line);color:var(--mut);border-radius:10px;padding:11px;width:100%;cursor:pointer;font-family:var(--body);font-size:13px}
-  .amor-total{text-align:right;font-family:var(--mono);font-size:13px;color:var(--ink);margin-top:10px}
-  .amor-total b{color:var(--red)}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 12px}
-  .chip{background:var(--panel2);border:1px solid var(--line);color:var(--mut);border-radius:999px;padding:7px 12px;font-size:12.5px;cursor:pointer;font-family:var(--body)}
-  .chip:hover{border-color:var(--red);color:var(--ink)}
   /* asesoria */
   .advice{border-top:1px solid var(--line);padding:22px}
   .advice .ah{font-family:var(--disp);font-size:19px;margin-bottom:4px}
@@ -113,15 +142,25 @@
   .advice .full{margin-top:10px}
   .advice .send{width:100%;border:none;background:var(--green);color:#04140a;font-family:var(--disp);font-weight:700;font-size:15px;padding:14px;border-radius:12px;cursor:pointer;margin-top:14px}
   .advice .send:hover{filter:brightness(1.08)}
+  .advice .send:disabled{opacity:.6;cursor:default}
   .advice .priv{font-size:11px;color:var(--mut);text-align:center;margin-top:10px}
   .advice .fe{display:none;font-size:12.5px;color:var(--red);margin-top:8px}
   .advice .fe.show{display:block}
   .advice input.bad,.advice select.bad{border-color:var(--red)}
-  .advice .send:disabled{opacity:.6;cursor:default}
   .advice.dead{background:rgba(239,68,68,.06)}
   .thanks{display:none;text-align:center;padding:30px 22px;border-top:1px solid var(--line)}
   .thanks.show{display:block;animation:fade .4s ease}
   .thanks .big{font-family:var(--disp);font-size:22px;color:var(--green);margin-bottom:6px}
+
+  .explain{padding:44px 0}
+  .explain h2{font-family:var(--disp);font-size:26px;text-align:center;margin-bottom:8px}
+  .explain .sub{text-align:center;color:var(--mut);margin-bottom:26px;max-width:60ch;margin-left:auto;margin-right:auto}
+  .defs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:620px){.defs{grid-template-columns:1fr}}
+  .def{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .def b{font-family:var(--disp)} .def p{font-size:13.5px;color:var(--mut);margin-top:5px}
+  .quote{text-align:center;font-family:var(--disp);font-size:20px;color:var(--ink);max-width:60ch;margin:30px auto 0;line-height:1.4}
+  .quote span{color:var(--mut);font-size:13px;font-family:var(--mono);display:block;margin-top:10px}
   footer{text-align:center;color:var(--mut);font-size:12px;padding:30px 0}
 </style>
 </head>
@@ -135,6 +174,7 @@
     <h1>Gastás en lo que <span class="dead">amás</span>…<br/>¿pero tu vida se <span class="alive">sostiene</span>?</h1>
     <p class="lead">Le das a los tuyos, te das tus gustos, construís la vida que soñás. Pero casi nadie se anima a ver el número clave: si seguís así, ¿tus ingresos te alcanzan… o te estás comiendo tus ahorros sin darte cuenta?</p>
     <div class="credit">Marco <b>Default Alive</b> de Paul Graham (Y Combinator) — llevado a tu vida</div>
+    <a class="cta-hero" href="#tool">Hacer el test · 60 segundos ♥</a>
     <div class="ecg"><svg viewBox="0 0 1200 90" id="heroEcg"></svg></div>
   </header>
 
@@ -143,87 +183,135 @@
     <p>Gastamos en lo que <b>amamos</b>: los nuestros, los gustos, la vida que queremos. Y por eso mismo <b>evitamos mirar si eso se sostiene</b> — porque el número podría pedirnos frenar algo que amamos. <b style="color:var(--green)">El amor te ciega; los números te cuidan.</b> Quererte bien —y cuidar a tu yo del futuro— también es animarte a ver esto.</p>
   </div>
 
-  <div class="tool">
-    <div class="sec-t">📊 Tu mes, en números</div>
-    <div class="sec-s">Un mes típico tuyo. Con esto vemos si tu vida financiera está viva… o en cuenta regresiva.</div>
-    <div class="fields">
-      <div class="field"><label for="ing">Ingresos / mes</label><div class="in"><span>$</span><input id="ing" type="number" min="0" inputmode="decimal" value="1000"/></div></div>
-      <div class="field"><label for="cost">Gastos / mes</label><div class="in"><span>$</span><input id="cost" type="number" min="0" inputmode="decimal" value="1200"/></div></div>
-      <div class="field"><label for="caja">Ahorros / colchón hoy</label><div class="in"><span>$</span><input id="caja" type="number" min="0" inputmode="decimal" value="2500"/></div></div>
-      <div class="field"><label>Tus gastos, últimamente…</label>
-        <div class="seg" id="tend">
-          <button data-t="1" onclick="setT(this,1)">Suben</button>
-          <button data-t="0" class="on" onclick="setT(this,0)">Estables</button>
-          <button data-t="-1" onclick="setT(this,-1)">Bajan</button>
+  <div class="tool" id="tool">
+    <div class="wiz-top">
+      <div class="wiz-dots" id="wizDots"><span class="on"></span><span></span><span></span><span></span><span></span></div>
+      <button type="button" class="wiz-back" id="btnBack" onclick="wizBack()" style="visibility:hidden">← Volver</button>
+    </div>
+
+    <!-- PASO 1: ¿qué amás? -->
+    <section class="step" id="step1">
+      <div class="q-eyebrow">Paso 1 · Tus amores</div>
+      <h3 class="q">¿Qué es eso que amás hacer?</h3>
+      <p class="q-sub">Tocá todo lo que te hace feliz. Todavía no hablamos de plata — solo elegí.</p>
+      <div class="pick-grid" id="pickGrid"></div>
+      <div class="pick-free">
+        <input id="freeAmor" placeholder="¿Otro? Escribilo acá…"/>
+        <button type="button" onclick="addFree()">+</button>
+      </div>
+      <button type="button" class="next" id="next1" onclick="startCosts()" disabled>Siguiente →</button>
+    </section>
+
+    <!-- PASO 2: ¿sabés cuánto cuesta? (uno por uno) -->
+    <section class="step" id="step2" hidden>
+      <div class="q-eyebrow" id="costCount">Paso 2 · Amor 1 de 1</div>
+      <h3 class="q">¿Sabés cuánto te cuesta…</h3>
+      <div class="cost-amor" id="costAmor">☕ Café</div>
+      <div class="cost-box">
+        <div class="cin"><span>$</span><input id="costInput" type="number" min="0" inputmode="decimal" placeholder="0"/></div>
+        <div class="freq2" id="freq2">
+          <button type="button" data-f="dia" onclick="setFreq2(this)">por día</button>
+          <button type="button" class="on" data-f="mes" onclick="setFreq2(this)">por mes</button>
         </div>
       </div>
-    </div>
-    <div class="hr"></div>
-    <div class="sec-t">❤️ Tus amores (lo que amás y te cuesta)</div>
-    <div class="sec-s">Eso que hacés porque te hace feliz. Poné cuánto te cuesta — por día o por mes. Sumamos tus amores a tus gastos.</div>
-    <div class="chips" id="chips"></div>
-    <div id="amores"></div>
-    <button type="button" class="add-amor" onclick="addAmor()">+ Agregar un amor</button>
-    <div class="amor-total" id="amorTotal"></div>
+      <div class="cost-live" id="costLive"></div>
+      <div class="ticker" id="ticker"></div>
+      <button type="button" class="next" onclick="nextAmor()">Siguiente →</button>
+      <button type="button" class="skip" onclick="skipAmor()">No tengo idea — saltar este</button>
+    </section>
 
-    <div style="margin-top:14px">
-      <button type="button" id="advBtn" onclick="toggleAdv()" style="background:none;border:1px dashed var(--line);color:var(--mut);border-radius:10px;padding:12px;width:100%;cursor:pointer;font-family:var(--body);font-size:13px">⚙️ Ajustes avanzados (opcional) ▾</button>
-      <div id="adv" style="display:none;margin-top:12px">
-        <div class="fields">
-          <div class="field"><label for="extra">Ingresos extra / variables</label><div class="in"><span>$</span><input id="extra" type="number" min="0" inputmode="decimal" value="0"/></div><div class="hint-i">Freelance, comisiones, changas — promedio por mes.</div></div>
-          <div class="field"><label for="deuda">Cuotas de deuda / mes</label><div class="in"><span>$</span><input id="deuda" type="number" min="0" inputmode="decimal" value="0"/></div><div class="hint-i">Préstamos, tarjeta, financiamientos.</div></div>
-          <div class="field"><label for="deudaTotal">Saldo total de deudas (opcional)</label><div class="in"><span>$</span><input id="deudaTotal" type="number" min="0" inputmode="decimal" value="0"/></div><div class="hint-i">Para estimar en cuánto la terminás de pagar.</div></div>
-        </div>
-      </div>
-    </div>
-    <button class="diag" onclick="diagnosticar()">Ver si estoy vivo ♥</button>
-    <div class="disc">Inspirado en el marco Default Alive/Dead de Paul Graham · herramienta de reflexión, no asesoría financiera profesional.</div>
-
-    <div class="result" id="result">
-      <div class="monitor">
-        <div class="m-top">
-          <div class="m-verdict" id="verdict">—</div>
-          <div class="m-sub" id="vsub"></div>
-          <div class="m-ecg"><svg viewBox="0 0 1200 70" id="resEcg"></svg></div>
-        </div>
-        <div class="vitals">
-          <div class="vital"><div class="vl">Balance / mes</div><div class="vv" id="vRes">—</div></div>
-          <div class="vital"><div class="vl" id="vRunL">Meses de colchón</div><div class="vv" id="vRun">—</div></div>
-          <div class="vital"><div class="vl">Tasa de ahorro</div><div class="vv" id="vSav">—</div></div>
-          <div class="vital"><div class="vl" id="vTenL">Tus gastos</div><div class="vv" id="vTen">—</div></div>
-        </div>
-        <div class="why">
-          <h4>Por qué este veredicto</h4>
-          <p id="whyTxt"></p>
-          <div class="rec" id="recBox"></div>
-        </div>
-        <div class="heart-msg" id="heartMsg"></div>
-
-        <div class="advice" id="advice" style="display:none">
-          <div class="ah" id="adviceH">¿Querés que te acompañen con esto?</div>
-          <div class="as" id="adviceS">Dejá tus datos y un asesor te orienta, sin costo.</div>
-          <div class="row">
-            <input id="fNombre" placeholder="Tu nombre" autocomplete="name"/>
-            <input id="fContacto" placeholder="Email o WhatsApp" autocomplete="email"/>
+    <!-- PASO 3: lo esencial -->
+    <section class="step" id="step3" hidden>
+      <div class="q-eyebrow">Paso 3 · Lo esencial</div>
+      <h3 class="q">Ahora, la base de tu mes</h3>
+      <p class="q-sub">Tres números y ya está. Aproximados sirven.</p>
+      <div class="fields">
+        <div class="field"><label for="ing">¿Cuánto ganás al mes?</label><div class="in" id="inIng"><span>$</span><input id="ing" type="number" min="0" inputmode="decimal" placeholder="0"/></div></div>
+        <div class="field"><label for="cost">¿Cuánto se va en gastos fijos?</label><div class="in"><span>$</span><input id="cost" type="number" min="0" inputmode="decimal" placeholder="0"/></div><div class="hint-i">Renta, comida, transporte, servicios — <b>sin contar tus amores</b> (esos ya los sumamos).</div></div>
+        <div class="field"><label for="caja">¿Cuánto tenés ahorrado hoy?</label><div class="in"><span>$</span><input id="caja" type="number" min="0" inputmode="decimal" placeholder="0"/></div><div class="hint-i">Tu colchón: cuentas, efectivo, lo que podrías usar si hiciera falta.</div></div>
+        <div class="field"><label>Tus gastos, últimamente…</label>
+          <div class="seg" id="tend">
+            <button type="button" data-t="1" onclick="setT(this,1)">Suben</button>
+            <button type="button" data-t="0" class="on" onclick="setT(this,0)">Estables</button>
+            <button type="button" data-t="-1" onclick="setT(this,-1)">Bajan</button>
           </div>
-          <select id="fMeta" class="full">
-            <option value="">¿Qué te gustaría lograr? (opcional)</option>
-            <option>Salir del rojo y ordenarme</option>
-            <option>Armar mi fondo de emergencia</option>
-            <option>Pagar mis deudas más rápido</option>
-            <option>Empezar a invertir</option>
-          </select>
-          <div class="fe" id="formErr"></div>
-          <button type="button" class="send" onclick="enviarAsesoria()">Quiero orientación gratis →</button>
-          <div class="priv">Tus datos son privados. Solo los usamos para contactarte sobre esto.</div>
         </div>
-        <div class="thanks" id="thanks">
-          <div class="big">¡Gracias! ♥</div>
-          <p id="thanksTxt">Recibimos tus datos. Un asesor se pondrá en contacto con vos pronto.</p>
-        </div>
-
       </div>
-    </div>
+      <div class="step-err" id="err3">Contanos cuánto ganás al mes para poder darte el veredicto.</div>
+      <button type="button" class="next" onclick="toStep(4)">Siguiente →</button>
+    </section>
+
+    <!-- PASO 4: opcional -->
+    <section class="step" id="step4" hidden>
+      <div class="q-eyebrow">Paso 4 · Opcional</div>
+      <h3 class="q">¿Algo más que deba saber?</h3>
+      <p class="q-sub">Si no aplica, saltalo directo al veredicto.</p>
+      <div class="fields">
+        <div class="field"><label for="extra">Ingresos extra / variables</label><div class="in"><span>$</span><input id="extra" type="number" min="0" inputmode="decimal" placeholder="0"/></div><div class="hint-i">Freelance, comisiones, changas — promedio por mes.</div></div>
+        <div class="field"><label for="deuda">Cuotas de deuda / mes</label><div class="in"><span>$</span><input id="deuda" type="number" min="0" inputmode="decimal" placeholder="0"/></div><div class="hint-i">Préstamos, tarjeta, financiamientos.</div></div>
+        <div class="field"><label for="deudaTotal">Saldo total de deudas</label><div class="in"><span>$</span><input id="deudaTotal" type="number" min="0" inputmode="decimal" placeholder="0"/></div><div class="hint-i">Para estimar en cuánto la terminás de pagar.</div></div>
+      </div>
+      <button type="button" class="next red" onclick="revelar()">Ver si estoy vivo ♥</button>
+      <button type="button" class="skip" onclick="revelar()">Nada más — dame el veredicto →</button>
+      <div class="disc">Inspirado en el marco Default Alive/Dead de Paul Graham · herramienta de reflexión, no asesoría financiera profesional.</div>
+    </section>
+
+    <!-- PASO 5: veredicto -->
+    <section class="step" id="step5" hidden>
+      <div class="suspense" id="suspense">
+        <div class="ecg"><svg viewBox="0 0 1200 90" id="waitEcg"></svg></div>
+        <div class="s-t">Midiendo tu pulso financiero…</div>
+      </div>
+      <div class="result" id="result">
+        <div class="monitor">
+          <div class="m-top">
+            <div class="m-verdict" id="verdict">—</div>
+            <div class="m-sub" id="vsub"></div>
+            <div class="m-ecg"><svg viewBox="0 0 1200 70" id="resEcg"></svg></div>
+          </div>
+          <div class="vitals">
+            <div class="vital"><div class="vl">Balance / mes</div><div class="vv" id="vRes">—</div></div>
+            <div class="vital"><div class="vl" id="vRunL">Meses de colchón</div><div class="vv" id="vRun">—</div></div>
+            <div class="vital"><div class="vl">Tasa de ahorro</div><div class="vv" id="vSav">—</div></div>
+            <div class="vital"><div class="vl" id="vTenL">Tus amores</div><div class="vv" id="vTen">—</div></div>
+          </div>
+          <div class="why">
+            <h4>Por qué este veredicto</h4>
+            <p id="whyTxt"></p>
+            <div class="rec" id="recBox"></div>
+          </div>
+          <div class="heart-msg" id="heartMsg"></div>
+
+          <div class="advice" id="advice" style="display:none">
+            <div class="ah" id="adviceH">¿Querés que te acompañen con esto?</div>
+            <div class="as" id="adviceS">Dejá tus datos y un asesor te orienta, sin costo.</div>
+            <div class="row">
+              <input id="fNombre" placeholder="Tu nombre" autocomplete="name"/>
+              <input id="fContacto" placeholder="Email o WhatsApp" autocomplete="email"/>
+            </div>
+            <select id="fMeta" class="full">
+              <option value="">¿Qué te gustaría lograr? (opcional)</option>
+              <option>Salir del rojo y ordenarme</option>
+              <option>Armar mi fondo de emergencia</option>
+              <option>Pagar mis deudas más rápido</option>
+              <option>Empezar a invertir</option>
+            </select>
+            <div class="fe" id="formErr"></div>
+            <button type="button" class="send" onclick="enviarAsesoria()">Quiero orientación gratis →</button>
+            <div class="priv">Tus datos son privados. Solo los usamos para contactarte sobre esto.</div>
+          </div>
+          <div class="thanks" id="thanks">
+            <div class="big">¡Gracias! ♥</div>
+            <p id="thanksTxt">Recibimos tus datos. Un asesor se pondrá en contacto con vos pronto.</p>
+          </div>
+
+          <div class="redo">
+            <button type="button" onclick="toStep(3)">✏️ Ajustar mis números</button>
+            <button type="button" onclick="reiniciar()">↻ Rehacer desde cero</button>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </div>
 
@@ -244,6 +332,7 @@
 <footer class="z">Hecho para quererte bien, con los números de tu lado · Default Alive 💚</footer>
 
 <script>
+  /* ===== ECG ===== */
   function ecgPath(amp){
     var d='M0,35 ', x=0, base=35, step=150;
     while(x<1200){
@@ -255,97 +344,141 @@
   function paintEcg(id,amp,color){ var s=document.getElementById(id); s.innerHTML='<path d="'+ecgPath(amp)+'"/>'; s.querySelector('path').style.stroke=color; }
   paintEcg('heroEcg',10,'var(--green)');
 
-  var amorSeed=[["☕ Café de la mañana",2,"dia"],["🧘 Yoga",40,"mes"]];
-  function amorMensual(row){ var m=+row.querySelector(".m").value||0; var f=row.getAttribute("data-freq"); return f==="dia"? m*30 : m; }
-  function renderAmorTotal(){
-    var t=0; document.querySelectorAll("#amores .amor").forEach(function(r){ t+=amorMensual(r); r.querySelector(".mo").textContent="≈ "+money(amorMensual(r))+"/mes"; });
-    document.getElementById("amorTotal").innerHTML = t>0 ? ("Tus amores suman <b>"+money(t)+"/mes</b> 💸") : "";
-    return t;
-  }
-  function amorRow(nombre,monto,freq){
-    var d=document.createElement("div"); d.className="amor"; d.setAttribute("data-freq",freq||"mes");
-    d.innerHTML='<input class="nm" placeholder="Ej: café, gym, Netflix…" value="'+(nombre||"")+'">'+
-      '<input class="m" type="number" placeholder="0" value="'+(monto||"")+'">'+
-      '<div class="freq"><button type="button" data-f="dia" onclick="setFreq(this)">/día</button><button type="button" data-f="mes" onclick="setFreq(this)">/mes</button></div>'+
-      '<span class="mo"></span><button type="button" class="del" onclick="this.parentNode.remove();renderAmorTotal()">×</button>';
-    document.getElementById("amores").appendChild(d);
-    d.querySelector('[data-f="'+(freq||"mes")+'"]').classList.add("on");
-    d.querySelectorAll(".m,.nm").forEach(function(i){ i.addEventListener("input",renderAmorTotal); });
-    renderAmorTotal();
-  }
-  function setFreq(btn){ var row=btn.closest(".amor"); row.setAttribute("data-freq",btn.getAttribute("data-f")); row.querySelectorAll(".freq button").forEach(function(b){b.classList.remove("on")}); btn.classList.add("on"); renderAmorTotal(); }
-  function addAmor(){ amorRow("","","mes"); }
-  function totalAmores(){ var t=0; document.querySelectorAll("#amores .amor").forEach(function(r){ t+=amorMensual(r); }); return t; }
-  amorSeed.forEach(function(a){ amorRow(a[0],a[1],a[2]); });
-
-  // Chips: amores comunes de un toque
-  var chipDefs=[["🛵 Delivery",60,"mes"],["📺 Streaming",15,"mes"],["🏋️ Gym",35,"mes"],["🍻 Salidas",80,"mes"],["🎮 Gaming",25,"mes"],["💅 Cuidado personal",30,"mes"],["🐶 Mascota",40,"mes"],["🎁 Regalos",25,"mes"]];
-  chipDefs.forEach(function(c){
-    var b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent='+ '+c[0];
-    b.onclick=function(){ amorRow(c[0],c[1],c[2]); };
-    document.getElementById('chips').appendChild(b);
-  });
-
-  // El amor que más pesa en el mes
-  function amorMayor(){
-    var best=null,bv=0;
-    document.querySelectorAll('#amores .amor').forEach(function(r){
-      var v=amorMensual(r);
-      if(v>bv){ bv=v; best=(r.querySelector('.nm').value||'ese gusto'); }
-    });
-    return best?{nombre:best,monto:bv}:null;
-  }
-
-
-  var T=0;
-  function toggleAdv(){ var a=document.getElementById('adv'), b=document.getElementById('advBtn'); var open=a.style.display==='none'; a.style.display=open?'block':'none'; b.innerHTML='⚙️ Ajustes avanzados (opcional) '+(open?'▴':'▾'); }
-  function setT(btn,v){ T=v; document.querySelectorAll('#tend button').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); }
   function money(n){ var s=n<0?'-':''; return s+'$'+Math.abs(Math.round(n)).toLocaleString('es-SV'); }
 
-  // Analytics: eventos GA4-ready vía dataLayer (si no hay GTM, no rompe nada)
+  /* ===== Analytics: GA4-ready vía dataLayer (si no hay GTM, no rompe nada) ===== */
   window.dataLayer = window.dataLayer || [];
   function track(evento, datos){ window.dataLayer.push(Object.assign({event:evento}, datos||{})); }
 
-  function limpiarErr(){
-    document.querySelectorAll('#advice .bad').forEach(function(el){ el.classList.remove('bad'); });
-    var fe=document.getElementById('formErr'); fe.textContent=''; fe.classList.remove('show');
-  }
-  function marcarErr(el,msg){
-    el.classList.add('bad');
-    var fe=document.getElementById('formErr'); fe.textContent=msg; fe.classList.add('show');
-    el.focus();
-  }
-  function enviarAsesoria(){
-    limpiarErr();
-    var nEl=document.getElementById('fNombre'), cEl=document.getElementById('fContacto');
-    var n=nEl.value.trim(), c=cEl.value.trim();
-    var esEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c);
-    var esTel=/^[+()\d][\d\s()-]{6,}$/.test(c);
-    if(!n){ marcarErr(nEl,'Escribí tu nombre.'); return; }
-    if(!esEmail && !esTel){ marcarErr(cEl,'Dejá un email válido o un celular (mínimo 7 dígitos).'); return; }
-    var lead={ nombre:n, contacto:c, tipo_contacto: esEmail?'email':'whatsapp',
-      objetivo: document.getElementById('fMeta').value||null,
-      diagnostico: window._diag||{}, fecha: new Date().toISOString() };
-    // Producción: fetch('TU_WEBHOOK_N8N',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lead)});
-    console.log('LEAD →', lead);
-    track('lead_asesoria', { verdict: lead.diagnostico.verdict||null, objetivo: lead.objetivo });
-    var btn=document.querySelector('#advice .send'); btn.disabled=true; btn.textContent='Enviando…';
-    setTimeout(function(){
-      var st=(window._diag||{}).state;
-      var tx= st==='dead' ? 'Diste el paso más difícil: mirar el número. Un asesor te contacta pronto para ayudarte a darle vuelta al rojo.'
-            : st==='warn' ? 'Un asesor te contacta pronto para ayudarte a cerrar la fuga mientras todavía tenés margen.'
-            : 'Un asesor te contacta pronto para ayudarte a hacer crecer ese margen: fondo de emergencia, metas, inversión.';
-      document.getElementById('thanksTxt').textContent=tx;
-      document.getElementById('advice').style.display='none';
-      document.getElementById('thanks').classList.add('show');
-      document.getElementById('thanks').scrollIntoView({behavior:'smooth',block:'nearest'});
-      btn.disabled=false; btn.textContent='Quiero orientación gratis →';
-    },400);
-  }
-  ['fNombre','fContacto'].forEach(function(id){
-    document.getElementById(id).addEventListener('input', limpiarErr);
-  });
+  /* ===== Estado del wizard ===== */
+  var STEP=1, T=0;
+  var picks={};          // nombre → {monto:number|null, freq:'dia'|'mes'}
+  var order=[], idx=0;   // orden de amores para el paso 2
 
+  var sugeridos=[
+    ["☕ Café","dia"],["🏋️ Ejercicio","mes"],["🎵 Música","mes"],["🛵 Delivery","mes"],
+    ["🍻 Salidas","mes"],["📺 Streaming","mes"],["🎮 Gaming","mes"],["🧘 Yoga","mes"],
+    ["💅 Cuidado personal","mes"],["🐶 Mascota","mes"],["🎁 Regalos","mes"],["✈️ Escapadas","mes"]
+  ];
+
+  /* ===== Paso 1: elegir amores ===== */
+  var grid=document.getElementById('pickGrid');
+  sugeridos.forEach(function(s){ grid.appendChild(pickBtn(s[0],s[1])); });
+  function pickBtn(nombre,freq){
+    var b=document.createElement('button'); b.type='button'; b.className='pick'; b.textContent=nombre;
+    b.onclick=function(){
+      if(picks[nombre]){ delete picks[nombre]; b.classList.remove('on'); }
+      else{ picks[nombre]={monto:null,freq:freq||'mes'}; b.classList.add('on'); }
+      document.getElementById('next1').disabled = Object.keys(picks).length===0;
+    };
+    return b;
+  }
+  function addFree(){
+    var i=document.getElementById('freeAmor'), n=i.value.trim();
+    if(!n) return;
+    if(!picks[n]){
+      var b=pickBtn(n,'mes'); grid.appendChild(b); b.click();
+    }
+    i.value=''; i.focus();
+  }
+  document.getElementById('freeAmor').addEventListener('keydown',function(e){ if(e.key==='Enter'){ addFree(); }});
+
+  /* ===== Navegación ===== */
+  function toStep(n){
+    STEP=n;
+    for(var i=1;i<=5;i++){ document.getElementById('step'+i).hidden = (i!==n); }
+    document.querySelectorAll('#wizDots span').forEach(function(d,i){ d.classList.toggle('on', i<n); });
+    document.getElementById('btnBack').style.visibility = n>1?'visible':'hidden';
+    document.getElementById('tool').scrollIntoView({behavior:'smooth',block:'start'});
+    track('paso_wizard',{paso:n});
+  }
+  function wizBack(){
+    if(STEP===2){ if(idx>0){ guardarMonto(); idx--; showAmor(); } else toStep(1); }
+    else if(STEP===3){ if(order.length){ idx=order.length-1; toStep(2); showAmor(); } else toStep(1); }
+    else if(STEP===4) toStep(3);
+    else if(STEP===5) toStep(4);
+  }
+  function reiniciar(){ location.reload(); }
+
+  /* ===== Paso 2: costo por amor ===== */
+  function startCosts(){
+    order=Object.keys(picks); idx=0;
+    if(!order.length){ toStep(3); return; }
+    toStep(2); showAmor();
+  }
+  function showAmor(){
+    var n=order[idx], p=picks[n];
+    document.getElementById('costCount').textContent='Paso 2 · Amor '+(idx+1)+' de '+order.length;
+    document.getElementById('costAmor').textContent=n;
+    document.getElementById('costInput').value = p.monto!=null?p.monto:'';
+    document.querySelectorAll('#freq2 button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-f')===p.freq); });
+    liveCost(); renderTicker();
+    document.getElementById('costInput').focus();
+  }
+  function setFreq2(btn){
+    picks[order[idx]].freq=btn.getAttribute('data-f');
+    document.querySelectorAll('#freq2 button').forEach(function(b){ b.classList.remove('on'); });
+    btn.classList.add('on'); liveCost();
+  }
+  function mensual(p){ return (p.monto||0)*(p.freq==='dia'?30:1); }
+  function liveCost(){
+    var p=picks[order[idx]]; var m=+document.getElementById('costInput').value||0;
+    var mes=m*(p.freq==='dia'?30:1);
+    document.getElementById('costLive').textContent = m>0 ? ('≈ '+money(mes)+' al mes') : '';
+  }
+  document.getElementById('costInput').addEventListener('input',liveCost);
+  document.getElementById('costInput').addEventListener('keydown',function(e){ if(e.key==='Enter'){ nextAmor(); }});
+  function guardarMonto(){ picks[order[idx]].monto = +document.getElementById('costInput').value||0; }
+  function nextAmor(){
+    guardarMonto();
+    if(idx<order.length-1){ idx++; showAmor(); } else toStep(3);
+  }
+  function skipAmor(){
+    picks[order[idx]].monto=0;
+    if(idx<order.length-1){ idx++; showAmor(); } else toStep(3);
+  }
+  function renderTicker(){
+    var partes=[], total=0;
+    order.forEach(function(n,i){
+      if(i<idx && picks[n].monto>0){ var m=mensual(picks[n]); total+=m; partes.push(n+' '+money(m)); }
+    });
+    document.getElementById('ticker').innerHTML = partes.length ? (partes.join(' · ')+'<br/>Tus amores ya suman <b>'+money(total)+'/mes</b> 💸') : '';
+  }
+  function totalAmores(){ var t=0; order.forEach(function(n){ t+=mensual(picks[n]); }); return t; }
+  function amorMayor(){
+    var best=null,bv=0;
+    order.forEach(function(n){ var v=mensual(picks[n]); if(v>bv){ bv=v; best=n; } });
+    return best?{nombre:best,monto:bv}:null;
+  }
+
+  /* ===== Paso 3: validación ===== */
+  var _toStep=toStep;
+  toStep=function(n){
+    if(STEP===3 && n===4){
+      var ing=+document.getElementById('ing').value||0;
+      if(ing<=0){ document.getElementById('err3').classList.add('show'); document.getElementById('inIng').classList.add('bad'); document.getElementById('ing').focus(); return; }
+      document.getElementById('err3').classList.remove('show'); document.getElementById('inIng').classList.remove('bad');
+    }
+    _toStep(n);
+  };
+  document.getElementById('ing').addEventListener('input',function(){ document.getElementById('err3').classList.remove('show'); document.getElementById('inIng').classList.remove('bad'); });
+  ['ing','cost','caja'].forEach(function(id){ document.getElementById(id).addEventListener('keydown',function(e){ if(e.key==='Enter'){ toStep(4); }}); });
+  ['extra','deuda','deudaTotal'].forEach(function(id){ document.getElementById(id).addEventListener('keydown',function(e){ if(e.key==='Enter'){ revelar(); }}); });
+  function setT(btn,v){ T=v; document.querySelectorAll('#tend button').forEach(function(b){b.classList.remove('on')}); btn.classList.add('on'); }
+
+  /* ===== Revelado con suspenso ===== */
+  function revelar(){
+    toStep(5);
+    document.getElementById('result').classList.remove('show');
+    document.getElementById('suspense').style.display='block';
+    paintEcg('waitEcg',4,'var(--mut)');
+    setTimeout(function(){
+      document.getElementById('suspense').style.display='none';
+      diagnosticar();
+    },1600);
+  }
+
+  /* ===== Diagnóstico ===== */
   function diagnosticar(){
     var ing=+document.getElementById('ing').value||0;
     var cost=+document.getElementById('cost').value||0;
@@ -471,15 +604,51 @@
     document.getElementById('advice').style.display='block';
     document.getElementById('thanks').classList.remove('show');
 
-    track('diagnostico', { verdict: verdict, runway_meses: isFinite(runway)?Math.round(runway):null, tasa_ahorro: Math.round(sav*100) });
+    track('diagnostico', { verdict: verdict, runway_meses: isFinite(runway)?Math.round(runway):null, tasa_ahorro: Math.round(sav*100), amores_mes: amores });
 
     document.getElementById('result').classList.add('show');
     document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
   }
 
-  // Enter en cualquier campo numérico = diagnosticar
-  document.querySelectorAll('.tool input[type="number"]').forEach(function(i){
-    i.addEventListener('keydown', function(e){ if(e.key==='Enter'){ diagnosticar(); } });
+  /* ===== Formulario de asesoría ===== */
+  function limpiarErr(){
+    document.querySelectorAll('#advice .bad').forEach(function(el){ el.classList.remove('bad'); });
+    var fe=document.getElementById('formErr'); fe.textContent=''; fe.classList.remove('show');
+  }
+  function marcarErr(el,msg){
+    el.classList.add('bad');
+    var fe=document.getElementById('formErr'); fe.textContent=msg; fe.classList.add('show');
+    el.focus();
+  }
+  function enviarAsesoria(){
+    limpiarErr();
+    var nEl=document.getElementById('fNombre'), cEl=document.getElementById('fContacto');
+    var n=nEl.value.trim(), c=cEl.value.trim();
+    var esEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c);
+    var esTel=/^[+()\d][\d\s()-]{6,}$/.test(c);
+    if(!n){ marcarErr(nEl,'Escribí tu nombre.'); return; }
+    if(!esEmail && !esTel){ marcarErr(cEl,'Dejá un email válido o un celular (mínimo 7 dígitos).'); return; }
+    var lead={ nombre:n, contacto:c, tipo_contacto: esEmail?'email':'whatsapp',
+      objetivo: document.getElementById('fMeta').value||null,
+      diagnostico: window._diag||{}, fecha: new Date().toISOString() };
+    // Producción: fetch('TU_WEBHOOK_N8N',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lead)});
+    console.log('LEAD →', lead);
+    track('lead_asesoria', { verdict: lead.diagnostico.verdict||null, objetivo: lead.objetivo });
+    var btn=document.querySelector('#advice .send'); btn.disabled=true; btn.textContent='Enviando…';
+    setTimeout(function(){
+      var st=(window._diag||{}).state;
+      var tx= st==='dead' ? 'Diste el paso más difícil: mirar el número. Un asesor te contacta pronto para ayudarte a darle vuelta al rojo.'
+            : st==='warn' ? 'Un asesor te contacta pronto para ayudarte a cerrar la fuga mientras todavía tenés margen.'
+            : 'Un asesor te contacta pronto para ayudarte a hacer crecer ese margen: fondo de emergencia, metas, inversión.';
+      document.getElementById('thanksTxt').textContent=tx;
+      document.getElementById('advice').style.display='none';
+      document.getElementById('thanks').classList.add('show');
+      document.getElementById('thanks').scrollIntoView({behavior:'smooth',block:'nearest'});
+      btn.disabled=false; btn.textContent='Quiero orientación gratis →';
+    },400);
+  }
+  ['fNombre','fContacto'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', limpiarErr);
   });
 </script>
 </body>
